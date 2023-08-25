@@ -1,11 +1,12 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import "./Login.css";
+import { useNavigate } from "react-router-dom";
 
 
 function Login() {
 
-
+  const navigate = useNavigate()
   const [inputs, setInputs] = useState({});
 
   const handleChange = (event) => {
@@ -28,7 +29,8 @@ function Login() {
     var requestOptions = {
       method: "POST",
       headers: myHeaders,
-      body: raw
+      body: raw,
+      redirect: "follow"
     }
 
     fetch("https://api.nitirat.co.th/auth/sign-in", requestOptions)
@@ -39,9 +41,9 @@ function Login() {
           if (result.message === "OK") {
             
             Swal.fire("Logged In", "", "success")
-            .then(() => {
-              localStorage.setItem(result.data.access_token)
-             
+            .then((value) => {
+              navigate("/profile")
+              localStorage.setItem('token', result.data.access_token)
             })
             
           } else {
